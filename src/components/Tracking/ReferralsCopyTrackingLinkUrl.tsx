@@ -15,8 +15,14 @@ interface Props {
 const ReferralsCopyTrackingLinkUrl = ({ campaign }: Props) => {
   const [copiedValue, setCopiedValue] = useState<string>("");
   const fuul = new Fuul(process.env.NEXT_PUBLIC_FUUL_API_KEY as string);
+
   const trackingLinkUrl = fuul.generateTrackingLink({
+    // Here you can use your own to create a custom tracking link, for example in our case we will create /tracking page
+    baseUrl: `${window.location.origin}/tracking`,
+
+    // Here you should use the address of the user that will be the referrer
     address: "0x0000000",
+
     pid: campaign.project.id,
   });
 

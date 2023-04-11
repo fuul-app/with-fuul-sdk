@@ -4,10 +4,19 @@ import { Box, CircularProgress, Container, Grid } from "@mui/material";
 
 import { Fuul } from "@fuul/sdk";
 
-import ReferralsInfo from "@/components/tracking/ReferralsInfo";
-import ReferralsCopyTrackingLinkUrl from "@/components/tracking/ReferralsCopyTrackingLinkUrl";
+import ReferralsInfo from "@/src/components/Tracking/ReferralsInfo";
+import ReferralsCopyTrackingLinkUrl from "@/src/components/Tracking/ReferralsCopyTrackingLinkUrl";
+import ConversionsListTable from "@/src/components/ConversionListTable/ConversionsListTable";
 
-import { CampaignDTO } from "@fuul/sdk/lib/esm/types/infrastructure/campaigns/dtos";
+import {
+  CampaignDTO,
+  ConversionDTO,
+} from "@fuul/sdk/lib/esm/types/infrastructure/campaigns/dtos";
+
+export enum PaymentType {
+  END_USER = "referral_amount",
+  REFERRER = "referrer_amount",
+}
 
 export default function TrackingLinkCreationPage() {
   const [campaigns, setCampaigns] = useState<CampaignDTO[]>();
@@ -23,6 +32,17 @@ export default function TrackingLinkCreationPage() {
   }, []);
 
   if (!campaigns) return <CircularProgress size={20} />;
+
+  // Filter out the conversions that have a referrer reward
+  const conversionsWithRewards: ConversionDTO[] = [];
+
+  campaigns.forEach((campaign) => {
+    campaign.conversions?.forEach((conversion: ConversionDTO) => {
+      if (conversion[PaymentType.REFERRER]) {
+        conversionsWithRewards.push(conversion);
+      }
+    });
+  });
 
   return (
     <>
@@ -40,6 +60,14 @@ export default function TrackingLinkCreationPage() {
           <Grid container rowSpacing={5} justifyContent="center">
             <ReferralsInfo campaign={campaigns?.[0]} />
             <ReferralsCopyTrackingLinkUrl campaign={campaigns?.[0]} />
+            {conversionsWithRewards && (
+              <Grid item xs={12} md={8}>
+                <ConversionsListTable
+                  conversions={conversionsWithRewards}
+                  paymentType={PaymentType.REFERRER}
+                />
+              </Grid>
+            )}
           </Grid>
         </Container>
       </Box>
