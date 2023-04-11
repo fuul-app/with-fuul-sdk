@@ -23,6 +23,7 @@ const ReferralsCopyTrackingLinkUrl = ({ campaign }: Props) => {
     // Here you should use the address of the user that will be the referrer
     address: "0x0000000",
 
+    // Id of the project you want to refer
     pid: campaign.project.id,
   });
 

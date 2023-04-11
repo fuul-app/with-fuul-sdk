@@ -2,9 +2,9 @@ import { Box, Link, Typography } from "@mui/material";
 import Image from "next/image";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
-import { PaymentType } from "@/pages/referrals";
 import { ConversionDTO } from "@fuul/sdk/lib/esm/types/infrastructure/campaigns/dtos";
 import { formatDecimalAmount } from "@/src/utils/format";
+import { PaymentType } from "@/src/types";
 
 interface Props {
   conversion: ConversionDTO;

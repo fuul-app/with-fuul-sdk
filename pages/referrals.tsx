@@ -4,28 +4,24 @@ import { Box, CircularProgress, Container, Grid } from "@mui/material";
 
 import { Fuul } from "@fuul/sdk";
 
-import ReferralsInfo from "@/src/components/Tracking/ReferralsInfo";
-import ReferralsCopyTrackingLinkUrl from "@/src/components/Tracking/ReferralsCopyTrackingLinkUrl";
+import ReferralsInfo from "@/src/components/Referrals/ReferralsInfo";
+import ReferralsCopyTrackingLinkUrl from "@/src/components/Referrals/ReferralsCopyTrackingLinkUrl";
 import ConversionsListTable from "@/src/components/ConversionListTable/ConversionsListTable";
 
 import {
   CampaignDTO,
   ConversionDTO,
 } from "@fuul/sdk/lib/esm/types/infrastructure/campaigns/dtos";
-
-export enum PaymentType {
-  END_USER = "referral_amount",
-  REFERRER = "referrer_amount",
-}
+import { PaymentType } from "@/src/types";
 
 export default function TrackingLinkCreationPage() {
   const [campaigns, setCampaigns] = useState<CampaignDTO[]>();
 
-  // Initialize Fuul SDK with the API key (remember to store it in a .env file in production)
+  // Initialize Fuul SDK with your API key (remember to store it in a .env file in production)
   const fuul = new Fuul(process.env.NEXT_PUBLIC_FUUL_API_KEY as string);
 
   useEffect(() => {
-    // Fetch the campaigns for the given project from the Fuul API
+    // Fetch campaigns from Fuul API
     fuul.getAllCampaigns().then((data) => {
       setCampaigns(data);
     });

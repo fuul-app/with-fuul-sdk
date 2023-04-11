@@ -1,8 +1,9 @@
-import { Card, CardContent, Link, Typography } from "@mui/material";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import { PaymentType } from "@/pages/referrals";
-import { ConversionDTO } from "@fuul/sdk/lib/esm/types/infrastructure/campaigns/dtos";
+import { Card, CardContent, Typography } from "@mui/material";
+
 import ConversionListItem from "@/src/components/ConversionListTable/ConversionListItem";
+
+import { ConversionDTO } from "@fuul/sdk/lib/esm/types/infrastructure/campaigns/dtos";
+import { PaymentType } from "@/src/types";
 
 interface Props {
   paymentType: PaymentType;
