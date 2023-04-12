@@ -4,7 +4,7 @@ This guide will walk you through how to use Fuul SDK library within a Next.js ap
 
 Please note that Fuul's SDK could be used in any JavaScript application, not only Next.js. You can see the full documentation for the SDK library [here](https://docs.fuul.xyz/technical-guide-for-projects/building-a-partner-onboarding-page-using-the-fuul-sdk).
 
-## **1. Installation**
+## 1. Installation
 
 Before you can use the SDK library, you'll need to install it in your project.
 
@@ -20,14 +20,14 @@ npm install @fuul/sdk
 yarn add @fuul/sdk
 ```
 
-## 2**. Setting up the pages**
+## 2. Setting up the pages
 
 In our example we will have two pages:
 
 - `index.tsx` - the main page that will list all the conversions and allow referrers to create tracking links
 - `tracking.tsx` - the page that will be used to track conversions
 
-### Referrer onboarding ****page `(index.tsx)`**
+### Referrer onboarding page `(index.tsx)`
 
 To create the first page that lists conversions, create a new page (in our case we will use `index.tsx`) and import Fuul SDK library. You can use the following code as a starting point:
 
@@ -92,7 +92,7 @@ const trackingLinkUrl = fuul.generateTrackingLink({
 });
 ```
 
-### User onboarding ****page `(tracking.tsx)`**
+### User onboarding page `(tracking.tsx)`
 
 This page is the one that will be used to track events (such as `connect_wallet` and `pageview`)
 
@@ -102,7 +102,7 @@ The process to retrieve the list of campaigns and show the conversions is pretty
 
 ![Referral amount image](/public/referral_amount.png)
 
-## 3**. Sending events**
+## 3. Sending events
 
 ### connect_wallet
 
