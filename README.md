@@ -1,36 +1,131 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Using Fuul SDK Library
 
-## Getting Started
+This guide will walk you through how to use Fuul SDK library within a Next.js application to build a two-page app that lists conversions and allows users to create tracking links. 
 
-First, run the development server:
+Please note that Fuul's SDK could be used in any JavaScript application, not only Next.js. You can see the full documentation for the SDK library [here](https://docs.fuul.xyz/technical-guide-for-projects/building-a-partner-onboarding-page-using-the-fuul-sdk).
+
+## **1. Installation**
+
+Before you can use the SDK library, you'll need to install it in your project.
+
+### npm
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+npm install @fuul/sdk
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### yarn
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+yarn add @fuul/sdk
+```
 
-[http://localhost:3000/api/hello](http://localhost:3000/api/hello) is an endpoint that uses [Route Handlers](https://beta.nextjs.org/docs/routing/route-handlers). This endpoint can be edited in `app/api/hello/route.ts`.
+## 2**. Setting up the pages**
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+In our example we will have two pages:
 
-## Learn More
+- `index.tsx` - the main page that will list all the conversions and allow referrers to create tracking links
+- `tracking.tsx` - the page that will be used to track conversions
 
-To learn more about Next.js, take a look at the following resources:
+### Referrer onboarding ****page `(index.tsx)`**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To create the first page that lists conversions, create a new page (in our case we will use `index.tsx`) and import Fuul SDK library. You can use the following code as a starting point:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```tsx
+import React from 'react';
+import { Fuul } from '@fuul/sdk';
 
-## Deploy on Vercel
+const TrackingLinkCreationPage = () => {
+  const fuul = new Fuul('<your-api-key>');
+	const [campaigns, setCampaigns] = useState();
+  
+	useEffect(() => {
+		fuul.getAllCampaigns().then((data) => {
+      setCampaigns(data);
+    });
+	}, []);
+};
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+export default ListConversionsPage;
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Here we are fetching the list of all campaigns related to the project based on the api-key you’ve entered. Then we’ll need to get all conversions for all the campaigns:
+
+```tsx
+const conversions = [];
+
+campaigns.forEach((campaign) => {
+  campaign.conversions?.forEach((conversion: ConversionDTO) => {
+    conversions.push(conversion);
+  });
+});
+```
+
+Then we simply map through the conversions and render a list as you can see in `src/components/ConversionListTable/ConversionsListTable.tsx` file on this repository.
+
+One important thing to note is that in our API, we have two “payment types”: 
+
+- `referrer_amount` which is the amount that the referrer will receive when a trigger is executed.
+- `referral_amount` which is the amount that the user that actually triggers the on chain event will receive.
+
+In this page you should emphasize on the `referrer_amount` and make clear to the referrer how much it will be paid for each conversion
+
+![Referrer amount image](/public/referrer_amount.png)
+
+### Creating a tracking link
+
+You can refer to `src/components/Referrals/ReferralsCopyTrackingLinkUrl.tsx` to see how to create a tracking link but basically what we need to do is the following:
+
+- One important thing to note here is that we’re setting the `baseUrl` property to `/tracking` since we need the end users land on that page to track conversions, but you could name this page whatever you want, just remember to point it correctly here.
+- Address should be taken from the current wallet connected
+
+```tsx
+const trackingLinkUrl = fuul.generateTrackingLink({
+   // Here you can use your own to create a custom tracking link, for example in our case we will create /tracking page
+   baseUrl: `${window.location.origin}/tracking`,
+
+   // Here you should use the address of the user that will be the referrer
+   address: "0x0000000",
+
+   // Id of the project you want to refer
+   pid: campaign.project.id,
+});
+```
+
+### User onboarding ****page `(tracking.tsx)`**
+
+This page is the one that will be used to track events (such as `connect_wallet` and `pageview`)
+
+The process to retrieve the list of campaigns and show the conversions is pretty much the same as we did before, but here we need to emphasize on the payment type `referral_amount`
+
+ 
+
+![Referral amount image](/public/referral_amount.png)
+
+## 3**. Sending events**
+
+### connect_wallet
+
+Once end user lands on the `tracking` page, Fuul’s SDK will automatically send a `pageview` event so you don’t need to perform any action on your side.
+
+But there’s another important event that needs to be manually sent and it’s `connect_wallet`.
+
+You can take a look at the implementation in `src/components/Tracking/ConnectWalletCard.tsx` but basically what we need to do is once the user connects it’s wallet and signs the message: 
+
+```tsx
+const { signMessageAsync } = useSignMessage({
+   onSuccess(data, variables) {
+     // Verify signature when sign message succeeds
+     const address = verifyMessage(variables.message, data);
+
+     if (address !== connectedAddress) {
+       window.alert("Invalid signature");
+     } else {
+			 // Here we send the connect_wallet event with the connected address as parameter
+       fuul.sendEvent("connect_wallet", {
+         address: connectedAddress,
+       });
+     }
+   },
+ });
+```

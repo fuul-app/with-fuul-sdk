@@ -29,14 +29,11 @@ export default function TrackingLinkCreationPage() {
 
   if (!campaigns) return <CircularProgress size={20} />;
 
-  // Filter out the conversions that have a referrer reward
-  const conversionsWithRewards: ConversionDTO[] = [];
+  const conversions: ConversionDTO[] = [];
 
   campaigns.forEach((campaign) => {
     campaign.conversions?.forEach((conversion: ConversionDTO) => {
-      if (conversion[PaymentType.REFERRER]) {
-        conversionsWithRewards.push(conversion);
-      }
+      conversions.push(conversion);
     });
   });
 
@@ -56,10 +53,10 @@ export default function TrackingLinkCreationPage() {
           <Grid container rowSpacing={5} justifyContent="center">
             <ReferralsInfo campaign={campaigns?.[0]} />
             <ReferralsCopyTrackingLinkUrl campaign={campaigns?.[0]} />
-            {conversionsWithRewards && (
+            {conversions && (
               <Grid item xs={12} md={8}>
                 <ConversionsListTable
-                  conversions={conversionsWithRewards}
+                  conversions={conversions}
                   paymentType={PaymentType.REFERRER}
                 />
               </Grid>

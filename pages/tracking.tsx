@@ -14,7 +14,6 @@ import ConnectWalletCard from "@/src/components/Tracking/ConnectWalletCard";
 const TrackingPage = (): JSX.Element => {
   const fuul = new Fuul(process.env.NEXT_PUBLIC_FUUL_API_KEY as string);
   const [campaigns, setCampaigns] = useState<CampaignDTO[]>();
-  const [showRedirectModal, setShowRedirectModal] = useState(false);
 
   useEffect(() => {
     fuul.getAllCampaigns().then((data) => {
