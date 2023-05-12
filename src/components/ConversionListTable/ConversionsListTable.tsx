@@ -2,8 +2,8 @@ import { Card, CardContent, Typography } from "@mui/material";
 
 import ConversionListItem from "@/src/components/ConversionListTable/ConversionListItem";
 
-import { ConversionDTO } from "@fuul/sdk/lib/esm/types/infrastructure/campaigns/dtos";
 import { PaymentType } from "@/src/types";
+import { ConversionDTO } from "@fuul/sdk/lib/esm/types/infrastructure/conversions/dtos";
 
 interface Props {
   paymentType: PaymentType;
@@ -26,16 +26,11 @@ const ConversionsListTable = ({
     );
   }
 
-  const title = {
-    [PaymentType.END_USER]: "Events that get you rewarded",
-    [PaymentType.REFERRER]: "Events that get you rewarded",
-  };
-
   return (
     <Card>
       <CardContent>
         <Typography variant="subtitle1" fontWeight="bold">
-          {title[paymentType]}
+          Conversions
         </Typography>
         {conversions.map((conversion) => (
           <ConversionListItem

@@ -2,18 +2,18 @@ import { useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 import { Fuul } from "@fuul/sdk";
-import { CampaignDTO } from "@fuul/sdk/lib/esm/types/infrastructure/campaigns/dtos";
 import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
 import { useAccount, useSignMessage } from "wagmi";
 import { verifyMessage } from "ethers/lib/utils.js";
+import { ConversionDTO } from "@fuul/sdk/lib/esm/types/infrastructure/conversions/dtos";
 
 const ACCEPT_REFERRAL_MESSAGE = `Accept referral at: ${new Date().toISOString()}`;
 
 interface Props {
-  campaign: CampaignDTO;
+  conversion: ConversionDTO;
 }
 
-const ConnectWalletCard = ({ campaign }: Props): JSX.Element => {
+const ConnectWalletCard = ({ conversion }: Props): JSX.Element => {
   const [connectedAddress, setConnectedAddress] = useState<string>();
   const fuul = new Fuul(process.env.NEXT_PUBLIC_FUUL_API_KEY as string);
 
@@ -25,14 +25,19 @@ const ConnectWalletCard = ({ campaign }: Props): JSX.Element => {
       if (address !== connectedAddress) {
         window.alert("Invalid signature");
       } else {
-        fuul.sendEvent("connect_wallet", {
-          address: connectedAddress,
-        });
+        fuul.sendEvent(
+          "connect_wallet",
+          {
+            address: connectedAddress,
+          },
+          data, // signature
+          variables.message as string // signature_message
+        );
       }
     },
   });
 
-  const { address } = useAccount({
+  useAccount({
     async onConnect({ address }) {
       setConnectedAddress(address);
 
@@ -48,10 +53,7 @@ const ConnectWalletCard = ({ campaign }: Props): JSX.Element => {
         <Card>
           <CardContent>
             <Typography variant="h4" textAlign="center" marginBottom="8px">
-              Join {campaign?.project.name} referral program!{" "}
-            </Typography>
-            <Typography variant="body1" marginBottom="28px" textAlign="center">
-              {campaign?.user_excerpt}
+              Join {conversion?.project.name} referral program!{" "}
             </Typography>
             <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
               How it works

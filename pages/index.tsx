@@ -8,51 +8,40 @@ import ReferralsInfo from "@/src/components/Referrals/ReferralsInfo";
 import ReferralsCopyTrackingLinkUrl from "@/src/components/Referrals/ReferralsCopyTrackingLinkUrl";
 import ConversionsListTable from "@/src/components/ConversionListTable/ConversionsListTable";
 
-import {
-  CampaignDTO,
-  ConversionDTO,
-} from "@fuul/sdk/lib/esm/types/infrastructure/campaigns/dtos";
 import { PaymentType } from "@/src/types";
+import { ConversionDTO } from "@fuul/sdk/lib/esm/types/infrastructure/conversions/dtos";
 
 export default function TrackingLinkCreationPage() {
-  const [campaigns, setCampaigns] = useState<CampaignDTO[]>();
+  const [conversions, setConversions] = useState<ConversionDTO[]>();
 
   // Initialize Fuul SDK with your API key (remember to store it in a .env file in production)
   const fuul = new Fuul(process.env.NEXT_PUBLIC_FUUL_API_KEY as string);
 
   useEffect(() => {
-    // Fetch campaigns from Fuul API
-    fuul.getAllCampaigns().then((data) => {
-      setCampaigns(data);
+    // Fetch conversions from Fuul API
+    fuul.getAllConversions().then((data) => {
+      setConversions(data);
     });
   }, []);
 
-  if (!campaigns) return <CircularProgress size={20} />;
-
-  const conversions: ConversionDTO[] = [];
-
-  campaigns.forEach((campaign) => {
-    campaign.conversions?.forEach((conversion: ConversionDTO) => {
-      conversions.push(conversion);
-    });
-  });
+  if (!conversions) return <CircularProgress size={20} />;
 
   return (
     <>
       <Head>
         <title>
-          Refer your audience to {campaigns?.[0].project.name} and earn rewards
+          Refer your audience to {conversions[0].project.name} and earn rewards
         </title>
         <meta
           name="description"
-          content={`Join ${campaigns?.[0].project.name}'s partner program and receive unlimited rewards with each successful referral. Create your own custom referral link and start earning today.`}
+          content={`Join ${conversions[0].project.name}'s partner program and receive unlimited rewards with each successful referral. Create your own custom referral link and start earning today.`}
         />
       </Head>
       <Box py={5}>
         <Container maxWidth="md">
           <Grid container rowSpacing={5} justifyContent="center">
-            <ReferralsInfo campaign={campaigns?.[0]} />
-            <ReferralsCopyTrackingLinkUrl campaign={campaigns?.[0]} />
+            <ReferralsInfo conversion={conversions[0]} />
+            <ReferralsCopyTrackingLinkUrl conversion={conversions[0]} />
             {conversions && (
               <Grid item xs={12} md={8}>
                 <ConversionsListTable

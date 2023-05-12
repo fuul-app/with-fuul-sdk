@@ -1,10 +1,9 @@
 import { Box, Link, Typography } from "@mui/material";
-import Image from "next/image";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
-import { ConversionDTO } from "@fuul/sdk/lib/esm/types/infrastructure/campaigns/dtos";
 import { formatDecimalAmount } from "@/src/utils/format";
 import { PaymentType } from "@/src/types";
+import { ConversionDTO } from "@fuul/sdk/lib/esm/types/infrastructure/conversions/dtos";
 
 interface Props {
   conversion: ConversionDTO;
@@ -27,11 +26,15 @@ const ConversionListItem = ({
   paymentType,
 }: Props): JSX.Element => {
   const getRewardText = (): string => {
-    const paymentAmount = conversion[paymentType];
+    const paymentAmount = conversion.action_args?.[paymentType];
+    const paymentCurrency = conversion.action_args?.payment_currency;
+    const isRewardedConversion = paymentAmount && paymentCurrency;
 
-    return `${formatDecimalAmount(paymentAmount)} ${
-      conversion.payment_currency
-    }`;
+    if (!isRewardedConversion) {
+      return "No reward";
+    }
+
+    return `${formatDecimalAmount(paymentAmount)} ${paymentCurrency}`;
   };
 
   return (
@@ -74,7 +77,7 @@ const ConversionListItem = ({
         ))}
       </Box>
       {paymentType === PaymentType.REFERRER &&
-        conversion.referral_amount > 0 && (
+        conversion.action_args?.referral_amount && (
           <Box
             display="flex"
             alignItems="center"
@@ -90,8 +93,8 @@ const ConversionListItem = ({
             <Typography variant="body2">
               The user you refer will also get{" "}
               <Typography variant="body2" component="span" fontWeight="bold">
-                {formatDecimalAmount(conversion.referral_amount)}{" "}
-                {conversion.payment_currency}
+                {formatDecimalAmount(conversion.action_args?.referral_amount)}{" "}
+                {conversion.action_args.payment_currency}
               </Typography>
             </Typography>
           </Box>

@@ -5,14 +5,13 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CheckIcon from "@mui/icons-material/Check";
 
 import { Fuul } from "@fuul/sdk";
-
-import { CampaignDTO } from "@fuul/sdk/lib/esm/types/infrastructure/campaigns/dtos";
+import { ConversionDTO } from "@fuul/sdk/lib/esm/types/infrastructure/conversions/dtos";
 
 interface Props {
-  campaign: CampaignDTO;
+  conversion: ConversionDTO;
 }
 
-const ReferralsCopyTrackingLinkUrl = ({ campaign }: Props) => {
+const ReferralsCopyTrackingLinkUrl = ({ conversion }: Props) => {
   const [copiedValue, setCopiedValue] = useState<string>("");
   const fuul = new Fuul(process.env.NEXT_PUBLIC_FUUL_API_KEY as string);
 
@@ -24,7 +23,7 @@ const ReferralsCopyTrackingLinkUrl = ({ campaign }: Props) => {
     address: "0x0000000",
 
     // Id of the project you want to refer
-    pid: campaign.project.id,
+    projectId: conversion.project.id,
   });
 
   const onCopy = useCallback((value: string) => {
