@@ -15,11 +15,12 @@ import ConnectWalletCard from "@/src/components/Tracking/ConnectWalletCard";
 import { ConversionDTO } from "@fuul/sdk/lib/esm/types/infrastructure/conversions/dtos";
 
 const TrackingPage = (): JSX.Element => {
-  const fuul = new Fuul(process.env.NEXT_PUBLIC_FUUL_API_KEY as string);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [conversions, setConversions] = useState<ConversionDTO[]>();
 
   useEffect(() => {
+    const fuul = new Fuul(process.env.NEXT_PUBLIC_FUUL_API_KEY as string);
+
     fuul
       .getAllConversions()
       .then((data) => {

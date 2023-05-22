@@ -22,6 +22,8 @@ const ConnectWalletCard = ({ conversion }: Props): JSX.Element => {
       // Verify signature when sign message succeeds
       const address = verifyMessage(variables.message, data);
 
+      console.log({ address });
+
       if (address !== connectedAddress) {
         window.alert("Invalid signature");
       } else {
