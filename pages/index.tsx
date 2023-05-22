@@ -14,10 +14,10 @@ import { ConversionDTO } from "@fuul/sdk/lib/esm/types/infrastructure/conversion
 export default function TrackingLinkCreationPage() {
   const [conversions, setConversions] = useState<ConversionDTO[]>();
 
-  // Initialize Fuul SDK with your API key (remember to store it in a .env file in production)
-  const fuul = new Fuul(process.env.NEXT_PUBLIC_FUUL_API_KEY as string);
-
   useEffect(() => {
+    // Initialize Fuul SDK with your API key (remember to store it in a .env file in production)
+    const fuul = new Fuul(process.env.NEXT_PUBLIC_FUUL_API_KEY as string);
+
     // Fetch conversions from Fuul API
     fuul.getAllConversions().then((data) => {
       setConversions(data);
