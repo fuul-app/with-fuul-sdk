@@ -15,14 +15,13 @@ interface Props {
 
 const ConnectWalletCard = ({ conversion }: Props): JSX.Element => {
   const [connectedAddress, setConnectedAddress] = useState<string>();
+
   const fuul = new Fuul(process.env.NEXT_PUBLIC_FUUL_API_KEY as string);
 
   const { signMessageAsync } = useSignMessage({
-    onSuccess(data, variables) {
+    onSuccess(signature, variables) {
       // Verify signature when sign message succeeds
-      const address = verifyMessage(variables.message, data);
-
-      console.log({ address });
+      const address = verifyMessage(variables.message, signature);
 
       if (address !== connectedAddress) {
         window.alert("Invalid signature");
@@ -31,9 +30,9 @@ const ConnectWalletCard = ({ conversion }: Props): JSX.Element => {
           "connect_wallet",
           {
             address: connectedAddress,
-          },
-          data, // signature
-          variables.message as string // signature_message
+            message: signature,
+            signature_message: variables.message,
+          },          
         );
       }
     },
