@@ -40,7 +40,7 @@ To create the first page that lists conversions, create a new page (in our case 
 
 ```tsx
 import React from "react";
-import { Fuul } from "@fuul/sdk";
+import Fuul from "@fuul/sdk";
 
 const TrackingLinkCreationPage = () => {
   const fuul = new Fuul("<your-api-key>");
