@@ -3,7 +3,7 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
 import { formatDecimalAmount } from "@/src/utils/format";
 import { PaymentType } from "@/src/types";
-import { ConversionDTO } from "@fuul/sdk/lib/esm/types/infrastructure/conversions/dtos";
+import { ConversionDTO } from "@fuul/sdk/dist/infrastructure/conversions/dtos";
 
 interface Props {
   conversion: ConversionDTO;
