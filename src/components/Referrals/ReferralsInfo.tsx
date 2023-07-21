@@ -1,4 +1,4 @@
-import { ConversionDTO } from "@fuul/sdk/lib/esm/types/infrastructure/conversions/dtos";
+import { ConversionDTO } from "@fuul/sdk/dist/infrastructure/conversions/dtos";
 import { Avatar, Grid, Typography } from "@mui/material";
 import Image from "next/image";
 
