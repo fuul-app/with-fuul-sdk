@@ -2,30 +2,37 @@
 
 This guide will walk you through how to use Fuul SDK library within a Next.js application to build a two-page app that lists conversions and allows users to create tracking links.
 
-Please note that Fuul's SDK could be used in any JavaScript application, not only Next.js. You can see the full documentation for the SDK library [here](https://docs.fuul.xyz/technical-guide-for-projects/building-a-partner-onboarding-page-using-the-fuul-sdk).
+Please note that Fuul's SDK can be used in any JavaScript application, not only in Next.js. You can see the full documentation for the SDK library [here](https://docs.fuul.xyz/technical-guide-for-projects/building-a-partner-onboarding-page-using-the-fuul-sdk).
 
-## 1. Installation
+## Installation
 
-Before you can use the SDK library, you'll need to install it in your project.
+1. Clone the repository
 
-### npm
+2. Copy the `.env.example` file into `.env`
 
-```bash
-npm install @fuul/sdk
-```
+You'll need to provide a production API Key for the Fuul SDK to be able to connect to your project and query information from it.
 
-### yarn
+3. Install project dependencies
 
 ```bash
-yarn add @fuul/sdk
+$ npm i
 ```
 
-## 2. Setting up the pages
+4. Start the server
+
+```bash
+$ npm start dev
+```
+
+You can then go to [http://localhost:3000]
+
+## Structure of the App
 
 In our example we will have two pages:
 
-- `index.tsx` - the main page that will list all the conversions and allow referrers to create tracking links
-- `tracking.tsx` - the page that will be used to track connect_wallet events and pageviews
+* Referrer onboarding page (index.tsx): Lists conversions and allows referrers to create tracking links
+  
+* `tracking.tsx` - the page that will be used to track connect_wallet events and pageviews
 
 ### Referrer onboarding page `(index.tsx)`
 
@@ -33,7 +40,7 @@ To create the first page that lists conversions, create a new page (in our case 
 
 ```tsx
 import React from "react";
-import { Fuul } from "@fuul/sdk";
+import Fuul from "@fuul/sdk";
 
 const TrackingLinkCreationPage = () => {
   const fuul = new Fuul("<your-api-key>");
@@ -51,7 +58,6 @@ export default ListConversionsPage;
 
 Here we are fetching the list of all conversions related to the project based on the api-key you’ve entered.
 
-````
 Then we simply map through the conversions and render a list as you can see in `src/components/ConversionListTable/ConversionsListTable.tsx` file on this repository.
 
 One important thing to note is that in our API, we have two “payment types”:
@@ -63,7 +69,7 @@ In this page you should emphasize on the `referrer_amount` and make clear to the
 
 ![Referrer amount image](/public/referrer_amount.png)
 
-### Creating a tracking link
+### Creating a Tracking Link
 
 You can refer to `src/components/Referrals/ReferralsCopyTrackingLinkUrl.tsx` to see how to create a tracking link but basically what we need to do is the following:
 
@@ -74,14 +80,12 @@ You can refer to `src/components/Referrals/ReferralsCopyTrackingLinkUrl.tsx` to 
 const trackingLinkUrl = fuul.generateTrackingLink({
    // Here you can use your own to create a custom tracking link, for example in our case we will create /tracking page
    baseUrl: `${window.location.origin}/tracking`,
-
    // Here you should use the address of the user that will be the referrer
    address: "0x0000000",
-
    // Id of the project you want to refer
    pid: conversion.project.id,
 });
-````
+```
 
 ### User onboarding page `(tracking.tsx)`
 
@@ -103,23 +107,18 @@ You can take a look at the implementation in `src/components/Tracking/ConnectWal
 
 ```tsx
 const { signMessageAsync } = useSignMessage({
-  onSuccess(data, variables) {
+  onSuccess(signature, variables) {
     // Verify signature when sign message succeeds
-    const address = verifyMessage(variables.message, data);
-
-    console.log({ address });
+    const address = verifyMessage(variables.message, signature);
 
     if (address !== connectedAddress) {
       window.alert("Invalid signature");
     } else {
-      fuul.sendEvent(
-        "connect_wallet",
-        {
-          address: connectedAddress,
-        },
-        data, // signature
-        variables.message as string // signature_message
-      );
+      fuul.sendEvent("connect_wallet", {}, {
+        address: connectedAddress,
+        message: signature,
+        signatureMessage: variables.message,
+      });
     }
   },
 });

@@ -2,21 +2,20 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import { Box, CircularProgress, Container, Grid } from "@mui/material";
 
-import { Fuul } from "@fuul/sdk";
+import Fuul from "@fuul/sdk";
 
 import ReferralsInfo from "@/src/components/Referrals/ReferralsInfo";
 import ReferralsCopyTrackingLinkUrl from "@/src/components/Referrals/ReferralsCopyTrackingLinkUrl";
 import ConversionsListTable from "@/src/components/ConversionListTable/ConversionsListTable";
 
 import { PaymentType } from "@/src/types";
-import { ConversionDTO } from "@fuul/sdk/lib/esm/types/infrastructure/conversions/dtos";
+import { ConversionDTO } from "@fuul/sdk/dist/infrastructure/conversions/dtos";
 
 export default function TrackingLinkCreationPage() {
   const [conversions, setConversions] = useState<ConversionDTO[]>();
 
   useEffect(() => {
-    // Initialize Fuul SDK with your API key (remember to store it in a .env file in production)
-    const fuul = new Fuul(process.env.NEXT_PUBLIC_FUUL_API_KEY as string);
+    const fuul = new Fuul(process.env.NEXT_PUBLIC_FUUL_API_KEY as string, { baseApiUrl: process.env.NEXT_PUBLIC_FUUL_API_URL });
 
     // Fetch conversions from Fuul API
     fuul.getAllConversions().then((data) => {
@@ -24,7 +23,9 @@ export default function TrackingLinkCreationPage() {
     });
   }, []);
 
-  if (!conversions) return <CircularProgress size={20} />;
+  if (!conversions) {
+    return <CircularProgress size={20} />;
+  }
 
   return (
     <>

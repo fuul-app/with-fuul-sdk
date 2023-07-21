@@ -4,8 +4,8 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CheckIcon from "@mui/icons-material/Check";
 
-import { Fuul } from "@fuul/sdk";
-import { ConversionDTO } from "@fuul/sdk/lib/esm/types/infrastructure/conversions/dtos";
+import Fuul from "@fuul/sdk";
+import { ConversionDTO } from "@fuul/sdk/dist/infrastructure/conversions/dtos";
 
 interface Props {
   conversion: ConversionDTO;

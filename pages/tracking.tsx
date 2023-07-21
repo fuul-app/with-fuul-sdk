@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Fuul } from "@fuul/sdk";
+import Fuul from "@fuul/sdk";
 import {
   Box,
   CircularProgress,
@@ -12,14 +12,14 @@ import { PaymentType } from "@/src/types";
 import Head from "next/head";
 import ConversionsListTable from "@/src/components/ConversionListTable/ConversionsListTable";
 import ConnectWalletCard from "@/src/components/Tracking/ConnectWalletCard";
-import { ConversionDTO } from "@fuul/sdk/lib/esm/types/infrastructure/conversions/dtos";
+import { ConversionDTO } from "@fuul/sdk/dist/infrastructure/conversions/dtos";
 
 const TrackingPage = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [conversions, setConversions] = useState<ConversionDTO[]>();
 
   useEffect(() => {
-    const fuul = new Fuul(process.env.NEXT_PUBLIC_FUUL_API_KEY as string);
+    const fuul = new Fuul(process.env.NEXT_PUBLIC_FUUL_API_KEY as string, { baseApiUrl: process.env.NEXT_PUBLIC_FUUL_API_URL });
 
     fuul
       .getAllConversions()
