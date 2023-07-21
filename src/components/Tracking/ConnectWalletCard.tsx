@@ -26,14 +26,11 @@ const ConnectWalletCard = ({ conversion }: Props): JSX.Element => {
       if (address !== connectedAddress) {
         window.alert("Invalid signature");
       } else {
-        fuul.sendEvent(
-          "connect_wallet",
-          {
-            address: connectedAddress,
-            message: signature,
-            signature_message: variables.message,
-          },          
-        );
+        fuul.sendEvent("connect_wallet", {}, {
+          userAddress: connectedAddress,
+          signature,
+          signatureMessage: variables.message as string,
+        });
       }
     },
   });

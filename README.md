@@ -107,24 +107,21 @@ You can take a look at the implementation in `src/components/Tracking/ConnectWal
 
 ```tsx
 const { signMessageAsync } = useSignMessage({
-    onSuccess(signature, variables) {
-      // Verify signature when sign message succeeds
-      const address = verifyMessage(variables.message, signature);
+  onSuccess(signature, variables) {
+    // Verify signature when sign message succeeds
+    const address = verifyMessage(variables.message, signature);
 
-      if (address !== connectedAddress) {
-        window.alert("Invalid signature");
-      } else {
-        fuul.sendEvent(
-          "connect_wallet",
-          {
-            address: connectedAddress,
-            message: signature,
-            signature_message: variables.message,
-          },          
-        );
-      }
-    },
-  });
+    if (address !== connectedAddress) {
+      window.alert("Invalid signature");
+    } else {
+      fuul.sendEvent("connect_wallet", {}, {
+        address: connectedAddress,
+        message: signature,
+        signatureMessage: variables.message,
+      });
+    }
+  },
+});
 ```
 
 Please bear in mind that you need to verify the signature before sending the event to Fuul’s API. Otherwise you will be sending invalid events.
