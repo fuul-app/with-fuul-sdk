@@ -1,12 +1,17 @@
 import "../styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
-
-import { connectorsForWallets, getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { AppProps } from "next/app";
+import Head from "next/head";
+import {
+  connectorsForWallets,
+  getDefaultWallets,
+  RainbowKitProvider,
+} from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { polygonMumbai } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
-import { metaMaskWallet } from '@rainbow-me/rainbowkit/wallets'
+import { metaMaskWallet } from "@rainbow-me/rainbowkit/wallets";
 
 const { chains, provider } = configureChains(
   [polygonMumbai],
@@ -22,21 +27,21 @@ const { chains, provider } = configureChains(
 
 const connectors = connectorsForWallets([
   {
-    groupName: 'Recommended',
+    groupName: "Recommended",
     wallets: [
-      metaMaskWallet({ chains, projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string }),
+      metaMaskWallet({
+        chains,
+        projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string,
+      }),
     ],
   },
-])
+]);
 
 const wagmiClient = createClient({
   autoConnect: true,
   connectors,
   provider,
 });
-
-import { AppProps } from "next/app";
-import Head from "next/head";
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   return (

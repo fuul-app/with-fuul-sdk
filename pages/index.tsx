@@ -1,6 +1,12 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import { Box, CircularProgress, Container, Grid } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Container,
+  Grid,
+  Typography,
+} from "@mui/material";
 
 import Fuul from "@fuul/sdk";
 
@@ -11,20 +17,33 @@ import ConversionsListTable from "@/src/components/ConversionListTable/Conversio
 import { PaymentType } from "@/src/types";
 import { ConversionDTO } from "@fuul/sdk/dist/infrastructure/conversions/dtos";
 
+const fuul = new Fuul(process.env.NEXT_PUBLIC_FUUL_API_KEY as string);
+
 export default function TrackingLinkCreationPage() {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [conversions, setConversions] = useState<ConversionDTO[]>();
 
   useEffect(() => {
-    const fuul = new Fuul(process.env.NEXT_PUBLIC_FUUL_API_KEY as string, { baseApiUrl: process.env.NEXT_PUBLIC_FUUL_API_URL });
-
-    // Fetch conversions from Fuul API
-    fuul.getAllConversions().then((data) => {
-      setConversions(data);
-    });
+    fuul
+      .getAllConversions()
+      .then((data) => {
+        setConversions(data);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
-  if (!conversions) {
+  if (!isLoading) {
     return <CircularProgress size={20} />;
+  }
+
+  if (!conversions?.length) {
+    return (
+      <Typography variant="h4" textAlign="center">
+        No conversions yet
+      </Typography>
+    );
   }
 
   return (

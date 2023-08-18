@@ -16,17 +16,16 @@ interface Props {
 const ConnectWalletCard = ({ conversion }: Props): JSX.Element => {
   const [connectedAddress, setConnectedAddress] = useState<string>();
 
-  const fuul = new Fuul(process.env.NEXT_PUBLIC_FUUL_API_KEY as string, { baseApiUrl: process.env.NEXT_PUBLIC_FUUL_API_URL });
+  const fuul = new Fuul(process.env.NEXT_PUBLIC_FUUL_API_KEY as string);
 
   const { signMessageAsync } = useSignMessage({
     onSuccess(signature, variables) {
-      // Verify signature when sign message succeeds
       const address = verifyMessage(variables.message, signature);
 
       if (address !== connectedAddress) {
         window.alert("Invalid signature");
       } else {
-        fuul.sendEvent("connect_wallet", {}, {
+        fuul.sendConnectWalletEvent({
           userAddress: connectedAddress,
           signature,
           signatureMessage: variables.message as string,
