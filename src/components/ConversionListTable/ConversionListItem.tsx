@@ -93,7 +93,7 @@ const ConversionListItem = ({
             <Typography variant="body2">
               The user you refer will also get{" "}
               <Typography variant="body2" component="span" fontWeight="bold">
-                {formatDecimalAmount(conversion.action_args?.referral_amount)}{" "}
+                {conversion.action_args?.referral_amount}{" "}
                 {conversion.action_args.payment_currency}
               </Typography>
             </Typography>

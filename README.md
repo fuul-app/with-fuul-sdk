@@ -42,12 +42,13 @@ To create the first page that lists conversions, create a new page (in our case 
 import React from "react";
 import Fuul from "@fuul/sdk";
 
+Fuul.init("<your-api-key>");
+
 const TrackingLinkCreationPage = () => {
-  const fuul = new Fuul("<your-api-key>");
   const [conversions, setConversions] = useState();
 
   useEffect(() => {
-    fuul.getAllConversions().then((data) => {
+    Fuul.getAllConversions().then((data) => {
       setConversions(data);
     });
   }, []);
@@ -77,7 +78,7 @@ You can refer to `src/components/Referrals/ReferralsCopyTrackingLinkUrl.tsx` to 
 - Address should be taken from the current wallet connected
 
 ```tsx
-const trackingLinkUrl = fuul.generateTrackingLink({
+const trackingLinkUrl = Fuul.generateTrackingLink({
    // Here you can use your own to create a custom tracking link, for example in our case we will create /tracking page
    baseUrl: `${window.location.origin}/tracking`,
    // Here you should use the address of the user that will be the referrer

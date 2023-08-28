@@ -8,23 +8,21 @@ import {
   Typography,
 } from "@mui/material";
 
-import Fuul from "@fuul/sdk";
-
 import ReferralsInfo from "@/src/components/Referrals/ReferralsInfo";
 import ReferralsCopyTrackingLinkUrl from "@/src/components/Referrals/ReferralsCopyTrackingLinkUrl";
 import ConversionsListTable from "@/src/components/ConversionListTable/ConversionsListTable";
 
 import { PaymentType } from "@/src/types";
-import { ConversionDTO } from "@fuul/sdk/dist/infrastructure/conversions/dtos";
+import { ConversionDTO } from '@fuul/sdk'
 
-const fuul = new Fuul(process.env.NEXT_PUBLIC_FUUL_API_KEY as string);
+import Fuul from '@fuul/sdk'
 
 export default function TrackingLinkCreationPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [conversions, setConversions] = useState<ConversionDTO[]>();
 
   useEffect(() => {
-    fuul
+    Fuul
       .getAllConversions()
       .then((data) => {
         setConversions(data);
@@ -34,7 +32,7 @@ export default function TrackingLinkCreationPage() {
       });
   }, []);
 
-  if (!isLoading) {
+  if (isLoading) {
     return <CircularProgress size={20} />;
   }
 

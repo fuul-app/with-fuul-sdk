@@ -7,6 +7,7 @@ import { useAccount, useSignMessage } from "wagmi";
 import { verifyMessage } from "ethers/lib/utils.js";
 import { ConversionDTO } from "@fuul/sdk/dist/infrastructure/conversions/dtos";
 
+
 const ACCEPT_REFERRAL_MESSAGE = `Accept referral at: ${new Date().toISOString()}`;
 
 interface Props {
@@ -16,8 +17,6 @@ interface Props {
 const ConnectWalletCard = ({ conversion }: Props): JSX.Element => {
   const [connectedAddress, setConnectedAddress] = useState<string>();
 
-  const fuul = new Fuul(process.env.NEXT_PUBLIC_FUUL_API_KEY as string);
-
   const { signMessageAsync } = useSignMessage({
     onSuccess(signature, variables) {
       const address = verifyMessage(variables.message, signature);
@@ -25,7 +24,7 @@ const ConnectWalletCard = ({ conversion }: Props): JSX.Element => {
       if (address !== connectedAddress) {
         window.alert("Invalid signature");
       } else {
-        fuul.sendConnectWalletEvent({
+        Fuul.sendConnectWalletEvent({
           userAddress: connectedAddress,
           signature,
           signatureMessage: variables.message as string,
