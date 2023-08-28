@@ -34,7 +34,7 @@ const ConversionListItem = ({
       return "No reward";
     }
 
-    return `${formatDecimalAmount(paymentAmount)} ${paymentCurrency}`;
+    return `${paymentAmount} ${paymentCurrency}`;
   };
 
   return (
