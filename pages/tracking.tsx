@@ -11,18 +11,16 @@ import { PaymentType } from "@/src/types";
 import Head from "next/head";
 import ConversionsListTable from "@/src/components/ConversionListTable/ConversionsListTable";
 import ConnectWalletCard from "@/src/components/Tracking/ConnectWalletCard";
-import Fuul from '@fuul/sdk'
-
-import { ConversionDTO } from '@fuul/sdk';
+import { Fuul, Conversion } from '@fuul/sdk';
 
 
 const TrackingPage = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [conversions, setConversions] = useState<ConversionDTO[]>();
+  const [conversions, setConversions] = useState<Conversion[]>();
 
   useEffect(() => {
     Fuul
-      .getAllConversions()
+      .getConversions()
       .then((data) => {
         setConversions(data);
       })

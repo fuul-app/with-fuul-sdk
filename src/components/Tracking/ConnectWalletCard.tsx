@@ -1,17 +1,16 @@
 import { useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
-import Fuul from "@fuul/sdk";
 import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
 import { useAccount, useSignMessage } from "wagmi";
 import { verifyMessage } from "ethers/lib/utils.js";
-import { ConversionDTO } from "@fuul/sdk/dist/infrastructure/conversions/dtos";
+import { Fuul, Conversion } from "@fuul/sdk";
 
 
 const ACCEPT_REFERRAL_MESSAGE = `Accept referral at: ${new Date().toISOString()}`;
 
 interface Props {
-  conversion: ConversionDTO;
+  conversion: Conversion;
 }
 
 const ConnectWalletCard = ({ conversion }: Props): JSX.Element => {
@@ -24,6 +23,8 @@ const ConnectWalletCard = ({ conversion }: Props): JSX.Element => {
       if (address !== connectedAddress) {
         window.alert("Invalid signature");
       } else {
+        Fuul.init({apiKey: 'ale-1234', debug:true})
+
         Fuul.sendConnectWalletEvent({
           userAddress: connectedAddress,
           signature,

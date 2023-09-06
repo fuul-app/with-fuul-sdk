@@ -3,10 +3,10 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
 import { formatDecimalAmount } from "@/src/utils/format";
 import { PaymentType } from "@/src/types";
-import { ConversionDTO } from "@fuul/sdk/dist/infrastructure/conversions/dtos";
+import { Conversion } from "@fuul/sdk";
 
 interface Props {
-  conversion: ConversionDTO;
+  conversion: Conversion;
   paymentType: PaymentType;
 }
 

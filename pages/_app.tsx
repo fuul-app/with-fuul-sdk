@@ -12,7 +12,9 @@ import { polygonMumbai } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { metaMaskWallet } from "@rainbow-me/rainbowkit/wallets";
-import Fuul from '@fuul/sdk';
+import { Fuul } from "@fuul/sdk";
+import { useEffect } from "react";
+
 
 const { chains, provider } = configureChains(
   [polygonMumbai],
@@ -44,11 +46,17 @@ const wagmiClient = createClient({
   provider,
 });
 
-Fuul.init(process.env.NEXT_PUBLIC_FUUL_API_KEY as string, {
-  baseApiUrl: process.env.NEXT_PUBLIC_FUUL_API_URL as string || undefined
+Fuul.init({ 
+  apiKey: process.env.NEXT_PUBLIC_FUUL_API_KEY || '', 
+  baseApiUrl: process.env.NEXT_PUBLIC_FUUL_API_URL, 
+  debug: true 
 })
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
+  useEffect(() => {
+    Fuul.sendPageViewEvent()
+  });
+
   return (
     <>
       <Head>

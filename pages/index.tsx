@@ -13,19 +13,17 @@ import ReferralsCopyTrackingLinkUrl from "@/src/components/Referrals/ReferralsCo
 import ConversionsListTable from "@/src/components/ConversionListTable/ConversionsListTable";
 
 import { PaymentType } from "@/src/types";
-import { ConversionDTO } from '@fuul/sdk'
-
-import Fuul from '@fuul/sdk'
+import { Fuul, Conversion } from '@fuul/sdk'
 
 export default function TrackingLinkCreationPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [conversions, setConversions] = useState<ConversionDTO[]>();
+  const [conversions, setConversions] = useState<Conversion[]>();
 
   useEffect(() => {
     Fuul
-      .getAllConversions()
-      .then((data) => {
-        setConversions(data);
+      .getConversions()
+      .then((conversions) => {
+        setConversions(conversions);
       })
       .finally(() => {
         setIsLoading(false);
