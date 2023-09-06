@@ -19,6 +19,10 @@ const TrackingPage = (): JSX.Element => {
   const [conversions, setConversions] = useState<Conversion[]>();
 
   useEffect(() => {
+    Fuul.sendPageview('/tracking');
+  }, []);
+
+  useEffect(() => {
     Fuul
       .getConversions()
       .then((data) => {

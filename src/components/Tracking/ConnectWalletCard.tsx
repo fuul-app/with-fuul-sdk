@@ -23,12 +23,10 @@ const ConnectWalletCard = ({ conversion }: Props): JSX.Element => {
       if (address !== connectedAddress) {
         window.alert("Invalid signature");
       } else {
-        Fuul.init({apiKey: 'ale-1234', debug:true})
-
-        Fuul.sendConnectWalletEvent({
-          userAddress: connectedAddress,
+        Fuul.sendConnectWallet({
+          address: connectedAddress,
           signature,
-          signatureMessage: variables.message as string,
+          message: variables.message as string,
         });
       }
     },

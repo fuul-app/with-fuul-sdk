@@ -53,10 +53,6 @@ Fuul.init({
 })
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
-  useEffect(() => {
-    Fuul.sendPageViewEvent()
-  });
-
   return (
     <>
       <Head>

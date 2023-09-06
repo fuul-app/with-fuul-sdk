@@ -42,13 +42,13 @@ To create the first page that lists conversions, create a new page (in our case 
 import React from "react";
 import Fuul from "@fuul/sdk";
 
-Fuul.init("<your-api-key>");
+Fuul.init({ apiKey: "<your-api-key>" });
 
 const TrackingLinkCreationPage = () => {
   const [conversions, setConversions] = useState();
 
   useEffect(() => {
-    Fuul.getAllConversions().then((data) => {
+    Fuul.getConversions().then((data) => {
       setConversions(data);
     });
   }, []);
@@ -115,10 +115,10 @@ const { signMessageAsync } = useSignMessage({
     if (address !== connectedAddress) {
       window.alert("Invalid signature");
     } else {
-      fuul.sendEvent("connect_wallet", {}, {
+      fuul.sendConnectWallet({
         address: connectedAddress,
         message: signature,
-        signatureMessage: variables.message,
+        signature: variables.message,
       });
     }
   },

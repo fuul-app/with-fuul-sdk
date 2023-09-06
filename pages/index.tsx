@@ -20,6 +20,10 @@ export default function TrackingLinkCreationPage() {
   const [conversions, setConversions] = useState<Conversion[]>();
 
   useEffect(() => {
+    Fuul.sendPageview('/home')
+  }, []);
+
+  useEffect(() => {
     Fuul
       .getConversions()
       .then((conversions) => {
