@@ -1,22 +1,20 @@
 import { useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
-import Fuul from "@fuul/sdk";
 import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
 import { useAccount, useSignMessage } from "wagmi";
 import { verifyMessage } from "ethers/lib/utils.js";
-import { ConversionDTO } from "@fuul/sdk/dist/infrastructure/conversions/dtos";
+import { Fuul, Conversion } from "@fuul/sdk";
+
 
 const ACCEPT_REFERRAL_MESSAGE = `Accept referral at: ${new Date().toISOString()}`;
 
 interface Props {
-  conversion: ConversionDTO;
+  conversion: Conversion;
 }
 
 const ConnectWalletCard = ({ conversion }: Props): JSX.Element => {
   const [connectedAddress, setConnectedAddress] = useState<string>();
-
-  const fuul = new Fuul(process.env.NEXT_PUBLIC_FUUL_API_KEY as string);
 
   const { signMessageAsync } = useSignMessage({
     onSuccess(signature, variables) {
@@ -25,10 +23,10 @@ const ConnectWalletCard = ({ conversion }: Props): JSX.Element => {
       if (address !== connectedAddress) {
         window.alert("Invalid signature");
       } else {
-        fuul.sendConnectWalletEvent({
-          userAddress: connectedAddress,
+        Fuul.sendConnectWallet({
+          address: connectedAddress,
           signature,
-          signatureMessage: variables.message as string,
+          message: variables.message as string,
         });
       }
     },

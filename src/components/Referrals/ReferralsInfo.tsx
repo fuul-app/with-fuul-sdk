@@ -1,9 +1,9 @@
-import { ConversionDTO } from "@fuul/sdk/dist/infrastructure/conversions/dtos";
+import { Conversion } from "@fuul/sdk";
 import { Avatar, Grid, Typography } from "@mui/material";
 import Image from "next/image";
 
 interface Props {
-  conversion: ConversionDTO;
+  conversion: Conversion;
 }
 
 const ReferralsInfo = ({ conversion }: Props) => {

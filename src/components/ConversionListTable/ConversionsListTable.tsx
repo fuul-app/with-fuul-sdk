@@ -3,11 +3,11 @@ import { Card, CardContent, Typography } from "@mui/material";
 import ConversionListItem from "@/src/components/ConversionListTable/ConversionListItem";
 
 import { PaymentType } from "@/src/types";
-import { ConversionDTO } from "@fuul/sdk/dist/infrastructure/conversions/dtos";
+import { Conversion } from "@fuul/sdk";
 
 interface Props {
   paymentType: PaymentType;
-  conversions: ConversionDTO[];
+  conversions: Conversion[];
 }
 
 const ConversionsListTable = ({

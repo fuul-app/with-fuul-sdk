@@ -4,27 +4,26 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CheckIcon from "@mui/icons-material/Check";
 
-import Fuul from "@fuul/sdk";
-import { ConversionDTO } from "@fuul/sdk/dist/infrastructure/conversions/dtos";
+import { Fuul } from "@fuul/sdk";
+import { Conversion } from "@fuul/sdk";
 
 interface Props {
-  conversion: ConversionDTO;
+  conversion: Conversion;
 }
 
 const ReferralsCopyTrackingLinkUrl = ({ conversion }: Props) => {
   const [copiedValue, setCopiedValue] = useState<string>("");
-  const fuul = new Fuul(process.env.NEXT_PUBLIC_FUUL_API_KEY as string);
-
-  const trackingLinkUrl = fuul.generateTrackingLink({
+  
+  const trackingLinkUrl = Fuul.generateTrackingLink(
     // Here you can use your own to create a custom tracking link, for example in our case we will create /tracking page
-    baseUrl: `${window.location.origin}/tracking`,
+    `${window.location.origin}/tracking`,
 
     // Here you should use the address of the user that will be the referrer
-    address: "0x0000000",
+    "0x0000000",
 
     // Id of the project you want to refer
-    projectId: conversion.project.id,
-  });
+    conversion.project.id,
+  );
 
   const onCopy = useCallback((value: string) => {
     setCopiedValue(value);

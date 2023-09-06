@@ -3,10 +3,10 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
 import { formatDecimalAmount } from "@/src/utils/format";
 import { PaymentType } from "@/src/types";
-import { ConversionDTO } from "@fuul/sdk/dist/infrastructure/conversions/dtos";
+import { Conversion } from "@fuul/sdk";
 
 interface Props {
-  conversion: ConversionDTO;
+  conversion: Conversion;
   paymentType: PaymentType;
 }
 
@@ -34,7 +34,7 @@ const ConversionListItem = ({
       return "No reward";
     }
 
-    return `${formatDecimalAmount(paymentAmount)} ${paymentCurrency}`;
+    return `${paymentAmount} ${paymentCurrency}`;
   };
 
   return (
@@ -93,7 +93,7 @@ const ConversionListItem = ({
             <Typography variant="body2">
               The user you refer will also get{" "}
               <Typography variant="body2" component="span" fontWeight="bold">
-                {formatDecimalAmount(conversion.action_args?.referral_amount)}{" "}
+                {conversion.action_args?.referral_amount}{" "}
                 {conversion.action_args.payment_currency}
               </Typography>
             </Typography>
