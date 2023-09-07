@@ -126,3 +126,4 @@ const { signMessageAsync } = useSignMessage({
 ```
 
 Please bear in mind that you need to verify the signature before sending the event to Fuul’s API. Otherwise you will be sending invalid events.
+
